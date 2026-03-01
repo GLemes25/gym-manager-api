@@ -1,8 +1,9 @@
 import fastifySwagger from "@fastify/swagger";
-import fastifySwaggerUI from "@fastify/swagger-ui";
 import "dotenv/config";
 
 import fastifyCors from "@fastify/cors";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+import fastifyApiReference from "@scalar/fastify-api-reference";
 import Fastify from "fastify";
 import {
   jsonSchemaTransform,
@@ -29,8 +30,8 @@ await app.register(fastifySwagger, {
     },
     servers: [
       {
-        description: "Localhost",
         url: "http://localhost:3000",
+        description: "Localhost",
       },
     ],
   },
@@ -38,12 +39,29 @@ await app.register(fastifySwagger, {
   transformObject: jsonSchemaTransformObject,
 });
 
-await app.register(fastifySwaggerUI, {
+await app.register(fastifyApiReference, {
   routePrefix: "/documentation",
+  configuration: {
+    sources: [
+      {
+        title: "gym-manager-api",
+        slug: "gym-manager-api",
+        url: "/swagger/json",
+      },
+      {
+        title: "Auth API",
+        slug: "auth-api",
+        url: "/api/auth/open-api/generate-schema",
+      },
+    ],
+  },
 });
 
+await app.register(fastifySwaggerUi, {
+  routePrefix: "/swagger",
+});
 await app.register(fastifyCors, {
-  origin: ["http://localhost:300"],
+  origin: ["http://localhost:3000"],
   credentials: true,
 });
 
