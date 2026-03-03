@@ -1,6 +1,6 @@
+import { WeekDayType } from "../enums/week-day.enum.js";
 import { NotFoundError } from "../errors/index.js";
 import { prisma } from "../lib/db.js";
-import { WeekDayType } from "../shared/enums/week-day.enum.js";
 
 interface InputDto {
   userId: string;
@@ -45,7 +45,7 @@ export class CreateWorkoutPlan {
       }
       const workoutPlan = await tx.workoutPlan.create({
         data: {
-          userId: dto.userId,
+          userId: crypto.randomUUID(),
           name: dto.name,
           isActive: true,
           workoutDays: {
