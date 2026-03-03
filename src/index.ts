@@ -70,7 +70,7 @@ await app.register(fastifyCors, {
 });
 
 //Routes
-await app.register(workoutPlanRoutes, { prefix: "/workout-plans" });
+await app.register(workoutPlanRoutes);
 
 app.withTypeProvider<ZodTypeProvider>().route({
   method: "GET",
