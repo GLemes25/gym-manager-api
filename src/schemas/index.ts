@@ -98,7 +98,7 @@ export const GetWorkoutDaySchema = z.object({
       restTimeInSeconds: z.number(),
     }),
   ),
-  sessions: z.array(
+  workoutSessions: z.array(
     z.object({
       id: z.uuid(),
       workoutDayId: z.uuid(),
@@ -161,3 +161,27 @@ export const ListWorkoutPlansSchema = z.array(
     ),
   }),
 );
+
+export const UpsertUserTrainDataBodySchema = z.object({
+  weightInGrams: z.number().min(0),
+  heightInCentimeters: z.number().min(0),
+  birthDate: z.iso.date(),
+  bodyFatPercentage: z.number().min(0).max(100),
+});
+
+export const UserTrainDataSchema = z.object({
+  userId: z.string(),
+  userName: z.string(),
+  weightInGrams: z.number(),
+  heightInCentimeters: z.number(),
+  birthDate: z.iso.date(),
+  bodyFatPercentage: z.number().min(0).max(100),
+});
+
+export const UpsertUserTrainDataSchema = z.object({
+  userId: z.string(),
+  weightInGrams: z.number(),
+  heightInCentimeters: z.number(),
+  birthDate: z.iso.date(),
+  bodyFatPercentage: z.number(),
+});

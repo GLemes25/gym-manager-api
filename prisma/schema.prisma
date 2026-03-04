@@ -20,7 +20,7 @@ model User {
   accounts            Account[]
   weightInGrams       Int?
   heightInCentimeters Int?
-  age                 Int?
+  birthDate           DateTime?     @db.Timestamptz()
   bodyFatPercentage   Int? // 100 representa 100% 
 
   @@unique([email])

@@ -29,11 +29,11 @@ interface OutputDto {
     reps: number;
     restTimeInSeconds: number;
   }>;
-  sessions: Array<{
+  workoutSessions: Array<{
     id: string;
     workoutDayId: string;
     startedAt?: string;
-    completedAt?: string;
+    finishedAt?: string;
   }>;
 }
 
@@ -75,11 +75,11 @@ export class GetWorkoutDay {
         reps: exercise.reps,
         restTimeInSeconds: exercise.restTimeInSeconds,
       })),
-      sessions: workoutDay.workoutSessions.map((session) => ({
+      workoutSessions: workoutDay.workoutSessions.map((session) => ({
         id: session.id,
         workoutDayId: session.workoutDayId,
         startedAt: dayjs.utc(session.startedAt).format("YYYY-MM-DD"),
-        completedAt: session.finishedAt
+        finishedAt: session.finishedAt
           ? dayjs.utc(session.finishedAt).format("YYYY-MM-DD")
           : undefined,
       })),
