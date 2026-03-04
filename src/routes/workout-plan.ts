@@ -22,7 +22,7 @@ import { UpdateWorkoutSession } from "../usecases/UpdateWorkoutSession.js";
 export const workoutPlanRoutes = async (app: FastifyInstance) => {
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "POST",
-    url: "/workout-plans",
+    url: "/",
     schema: {
       tags: ["Workout Plan"],
       summary: "Create a workout plan",
