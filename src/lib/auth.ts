@@ -4,21 +4,32 @@ import { openAPI } from "better-auth/plugins";
 import { prisma } from "./db.js";
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
+  // 🔥 AGORA FUNCIONA
+  secret: process.env.AUTH_SECRET as string,
+  baseURL: process.env.AUTH_URL as string,
+  trustHost: true,
+
   trustedOrigins: ["http://localhost:3000"],
+
+  cookies: {
+    secure: false,
+  },
+
   emailAndPassword: {
     enabled: true,
   },
+
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      accessType: "offline",
-      prompt: "select_account consent",
+      prompt: "select_account",
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
+
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+
   plugins: [openAPI()],
 });

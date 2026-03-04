@@ -36,7 +36,7 @@ await app.register(fastifySwagger, {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:8080",
         description: "Localhost",
       },
     ],
@@ -99,9 +99,13 @@ app.withTypeProvider<ZodTypeProvider>().route({
 });
 
 app.route({
-  method: ["GET", "POST"],
+  method: ["GET", "POST", "OPTIONS"],
   url: "/api/auth/*",
   async handler(request, reply) {
+    if (request.method === "OPTIONS") {
+      return reply.status(204).send();
+    }
+
     try {
       const url = new URL(request.url, `http://${request.headers.host}`);
 
@@ -113,14 +117,20 @@ app.route({
       const req = new Request(url.toString(), {
         method: request.method,
         headers,
-        ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+        body:
+          request.method !== "GET" && request.body
+            ? JSON.stringify(request.body)
+            : undefined,
       });
 
       const response = await auth.handler(req);
 
       reply.status(response.status);
-      response.headers.forEach((value, key) => reply.header(key, value));
-      reply.send(response.body ? await response.text() : null);
+
+      response.headers.forEach((value, key) => {
+        reply.header(key, value);
+      });
+      reply.send(response.body);
     } catch (error) {
       app.log.error(error, "Authentication error");
       reply.status(500).send({
@@ -130,15 +140,14 @@ app.route({
     }
   },
 });
-
 try {
   await app.listen({
-    port: Number(process.env.PORT ?? 3000),
+    port: Number(process.env.PORT ?? 8080),
     host: "0.0.0.0",
   });
 
-  app.log.info("Server running at http://localhost:3000");
-  app.log.info("API Docs available at http://localhost:3000/documentation");
+  app.log.info("Server running at http://localhost:8080");
+  app.log.info("API Docs available at http://localhost:8080/documentation");
 } catch (err) {
   app.log.error(err);
   process.exit(1);

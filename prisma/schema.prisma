@@ -8,22 +8,21 @@ datasource db {
 }
 
 model User {
-  id                  String        @id
-  workoutPlans        WorkoutPlan[]
+  id                  String        @id @default(cuid())
   name                String
-  email               String
+  email               String        @unique
   emailVerified       Boolean       @default(false)
   image               String?
   createdAt           DateTime      @default(now()) @db.Timestamptz()
   updatedAt           DateTime      @updatedAt @db.Timestamptz()
   sessions            Session[]
   accounts            Account[]
+  workoutPlans        WorkoutPlan[]
   weightInGrams       Int?
   heightInCentimeters Int?
   birthDate           DateTime?     @db.Timestamptz()
-  bodyFatPercentage   Int? // 100 representa 100% 
+  bodyFatPercentage   Int?
 
-  @@unique([email])
   @@map("user")
 }
 
