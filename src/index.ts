@@ -101,6 +101,9 @@ app.withTypeProvider<ZodTypeProvider>().route({
 app.route({
   method: ["GET", "POST", "OPTIONS"],
   url: "/api/auth/*",
+  schema: {
+    hide: true,
+  },
   async handler(request, reply) {
     if (request.method === "OPTIONS") {
       return reply.status(204).send();
