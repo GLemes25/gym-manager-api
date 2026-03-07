@@ -15,6 +15,7 @@ import {
 import z from "zod";
 
 import { auth } from "./lib/auth.js";
+import { env } from "./lib/env.js";
 import { aiRoutes } from "./routes/ai.js";
 import { homeRoutes } from "./routes/home.js";
 import { meRoutes } from "./routes/me.js";
@@ -36,8 +37,8 @@ await app.register(fastifySwagger, {
     },
     servers: [
       {
-        url: "http://localhost:8080",
-        description: "Localhost",
+        url: env.API_BASE_URL,
+        description: "API Base Url",
       },
     ],
   },
@@ -69,7 +70,7 @@ await app.register(fastifyApiReference, {
 });
 
 await app.register(fastifyCors, {
-  origin: ["http://localhost:3000"],
+  origin: [env.WEB_APP_BASE_URL],
   credentials: true,
 });
 
@@ -145,12 +146,12 @@ app.route({
 });
 try {
   await app.listen({
-    port: Number(process.env.PORT ?? 8080),
+    port: Number(env.PORT),
     host: "0.0.0.0",
   });
 
-  app.log.info("Server running at http://localhost:8080");
-  app.log.info("API Docs available at http://localhost:8080/documentation");
+  app.log.info(`Server running at ${env.API_BASE_URL}`);
+  app.log.info(`API Docs available at ${env.API_BASE_URL}/documentation`);
 } catch (err) {
   app.log.error(err);
   process.exit(1);
