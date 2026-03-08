@@ -33,4 +33,10 @@ export const auth = betterAuth({
   }),
 
   plugins: [openAPI()],
+
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
 });
